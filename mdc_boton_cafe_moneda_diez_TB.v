@@ -1,5 +1,3 @@
-// Code your testbench here
-// or browse Examples
 `timescale 1ns / 1ps
 module tb_maquina_de_cafe;
   
@@ -26,26 +24,38 @@ module tb_maquina_de_cafe;
   initial begin
     clk = 0;
     rst = 0;
-    ha = 1;
-    hc = 1;
+    hm = 0;
+    ha = 0;
+    bp = 0;
+    bb = 0;
+    hc = 0;
+    tm = 0;
+    
+    
+    // Caso 3: Se ingresa la moneda, hay agua, boton de cafe, hay cafe, moneda de 10, sirve cafe
+    // Estado Final: Servir Cafe (0111)
+    // Output: Devolver Moneda (111)
+    @(posedge clk)
+    #5 rst = 1;
     
     @(posedge clk)
-    #10 rst = 1;
+    #5 hm = 1;
     
-    tm = 1;
+    @(posedge clk)
+    hm = 0;
+    #5 ha = 1;
+    
+    @(posedge clk)
+    #5 bp = 1;
     bb = 0;
-    bp = 1;
-    hm = 1;
-   
     
-   
-    $finish();
+    @(posedge clk)
+    #5 hc = 1;
     
+    @(posedge clk)
+    #5 tm = 1;
+   
+    #100
+    $finish;
   end
-  initial begin
-    $display("output: %b",out);
-    $display("hm: %b",hm);
-  end
-
-  
 endmodule
