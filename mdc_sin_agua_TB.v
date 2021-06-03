@@ -1,22 +1,22 @@
 `timescale 1ns / 1ps
-module tb_maquina_de_cafe_sin_agua;
+module tb_maquina_de_cafe;
   
   reg clk, rst;
-  reg hm, ha, bp, bb, hc, tm;
-  // hay moneda, hay agua, boton pulsado, boton bebida, hay cafe, tipo de moneda
+  reg hm, ha, bp, bc, bt, hc, md, mc;
+  // hay moneda, hay agua, boton pulsado, boton cafe, boton te, hay cafe, moneda diez, moneda cinco
   wire [2:0] out;
   
   //instancia
   maquina_de_cafe U1(
     .clk(clk), .rst(rst),
-    .hm(hm), .ha(ha), .bp(bp), .bb(bb), .hc(hc), .tm(tm),
+    .hm(hm), .ha(ha), .bp(bp), .bc(bc), .bt(bt), .hc(hc), .md(md), .mc(mc),
     .out(out)
 );
   
   initial begin
     
     $dumpfile("maquina_de_cafe.vcd");
-    $dumpvars(0,tb_maquina_de_cafe_sin_agua);
+    $dumpvars(0,tb_maquina_de_cafe);
   end
   
   always #10 clk =~ clk;
@@ -27,9 +27,11 @@ module tb_maquina_de_cafe_sin_agua;
     hm = 0;
     ha = 0;
     bp = 0;
-    bb = 0;
+    bt = 0;
+    bc = 0;
     hc = 0;
-    tm = 0;
+    md = 0;
+    mc = 0;
     
     
     // Caso 1: Se ingresa la moneda y no hay agua

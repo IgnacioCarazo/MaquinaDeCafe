@@ -1,10 +1,9 @@
-// Code your design here
 `timescale 1ns / 1ps
 
 module maquina_de_cafe (
   input clk, rst,
-  input hm, ha, bp, bb, hc, tm,
-  // hay moneda, hay agua, boton pulsado, boton bebida, hay cafe, tipo de moneda
+  input hm, ha, bp, bc, bt, hc, md, mc,
+  // hay moneda, hay agua, boton pulsado, boton cafe, boton te, hay cafe, moneda diez, moneda cinco
   output reg [2:0] out
 );
   reg [3:0] state, next_state;
@@ -37,21 +36,21 @@ module maquina_de_cafe (
       s_espera_boton: if (bp) next_state = s_revisa_boton;
       				  else next_state = s_espera_boton;
       
-      s_revisa_boton: if (!bb) next_state = s_revisa_cafe;
-      				  else next_state = s_revisa_moneda_te;
+      s_revisa_boton: if (bc) next_state = s_revisa_cafe;
+      				  else if (bt) next_state = s_revisa_moneda_te;
       
       //proceso si se escoge cafe
       s_revisa_cafe: if (hc) next_state = s_revisa_moneda_cafe;
       				 else next_state = s_devuelve_moneda;
       
-      s_revisa_moneda_cafe: if (tm) next_state = s_sirve_cafe;
-      						else next_state = s_devuelve_moneda;
+      s_revisa_moneda_cafe: if (md) next_state = s_sirve_cafe;
+      						else if (mc) next_state = s_devuelve_moneda;
       
       s_sirve_cafe: next_state = s_espera_moneda;
       
       //proceso si se escoge te
-      s_revisa_moneda_te: if (tm) next_state = s_sirve_te_devuelve5;
-      					  else next_state = s_sirve_te;
+      s_revisa_moneda_te: if (md) next_state = s_sirve_te_devuelve5;
+      					  else if (mc) next_state = s_sirve_te;
       
       s_sirve_te_devuelve5: next_state = s_espera_moneda;
       
@@ -72,6 +71,12 @@ module maquina_de_cafe (
   //Logica de salida
   always @(*) begin
       case (state) 
+        //Outputs:
+        //"transicion" = 000
+        //devolver moneda = 100
+        //servir cafe = 111
+        //servir te = 110
+        //servir te con vuelto = 101
         
       s_espera_moneda: begin
         			   out = 3'b000;
