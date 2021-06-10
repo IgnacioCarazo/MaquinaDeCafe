@@ -57,7 +57,7 @@ module tb_maquina_de_cafe;
     @(posedge clk)
     #5 md = 1;
     
-    #10
+    #50
     
     hm = 0;
     ha = 0;
